@@ -4,6 +4,11 @@ History
 
 X.Y.Z (DD-MM-YYYY)
 ------------------
+* Write each column in one task, more than halving the overhead of small
+  writes (:pr:`255`)
+* Reduce the cost of checking writes to variably shaped columns (:pr:`255`)
+* Pass ``bool`` arrays to ``putcol`` without converting them to and from an
+  Arrow bitmap (:pr:`255`)
 * Fix quadratic read times for variably shaped columns whose row shapes
   differ: reading 100k ragged rows drops from 14 s to 0.15 s (:pr:`254`)
 * Read each column in one task per table instance, more than halving the
