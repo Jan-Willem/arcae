@@ -42,6 +42,20 @@ def test_table_keywords_roundtrip(keyword_table):
         assert T.getkeywords() == {"an_int": 6, "a_double": 1.5}
 
 
+def test_float_keywords_roundtrip_exactly(keyword_table):
+    """Doubles need up to 17 significant digits, floats read back widened"""
+    with Table.from_filename(keyword_table, readonly=False) as T:
+        T.putkeywords({"d": 3.5392577860590637})
+        taql = "ALTER TABLE $1 SET KEYWORD f=0.06638467311859131 AS R4"
+        Table.from_taql(taql, T).close()
+
+    with Table.from_filename(keyword_table) as T:
+        assert T.getkeywords() == {
+            "d": 3.5392577860590637,
+            "f": float(np.float32(0.06638467311859131)),
+        }
+
+
 def test_column_keywords_roundtrip(keyword_table):
     with Table.from_filename(keyword_table, readonly=False) as T:
         assert T.getcolkeywords("TIME") == {}
