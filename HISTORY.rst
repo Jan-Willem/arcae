@@ -4,6 +4,16 @@ History
 
 X.Y.Z (DD-MM-YYYY)
 ------------------
+* Spread large reads of fixed shape columns over table instances, which
+  previously ran on a single instance: reading a full column with 8 instances
+  takes 30-45% of the time it did. Reads are split at tile and Dysco block
+  boundaries, so that no tile is read by two instances (:pr:`260`)
+* Place work on the table instance with the least outstanding I/O, rather than
+  the fewest queued tasks (:pr:`260`)
+* Fix calls made while a table is closing running against the closed table,
+  where they could return wrong results, such as zero rows (:pr:`260`)
+* Add per-instance I/O statistics, and benchmarks of how evenly reads are spread
+  over table instances (:pr:`260`)
 * Remove the dev transpose test (:pr:`259`)
 * Write each column in one task, more than halving the overhead of small
   writes (:pr:`255`)
